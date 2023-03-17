@@ -1,19 +1,23 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+schedules:
+  - cron: '0 3 * * *'
+    displayName: 'Every day at 3am'
+    branches:
+      include: [main]
+    always: true
 
-trigger:
-- main
+trigger: none
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: .npmrc
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - bash: |
+      git config --global user.email 'bot@renovateapp.com'
+      git config --global user.name 'Renovate Bot'
+      npx --userconfig .npmrc renovate
+    env:
+      TOKEN: $(System.AccessToken)
