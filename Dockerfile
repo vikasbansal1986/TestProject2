@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM rook/ceph:v0.8.0
+FROM rook/ceph:v1.11.9
 ENV NODE_ENV=production
 
 WORKDIR /app
